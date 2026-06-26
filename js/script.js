@@ -1,21 +1,23 @@
 /* ============================================================
-   Magic 8 Ball — interactive logic
+   Magic 8 Ball — responsive, shake-enabled
    ============================================================ */
 
 let fortunes = [];
 let shakeCount = parseInt(localStorage.getItem('magic8ball_shakes') || '0', 10);
 let isShaking = false;
 let audioCtx = null;
-let lastAccel = { x: 0, y: 0, z: 0 };
-let accelShakeThreshold = 15;
-let lastShakeTime = 0;
 let history = JSON.parse(localStorage.getItem('magic8ball_history') || '[]');
+
+// Shake detection state
+let lastAccel = { x: 0, y: 0, z: 0 };
+let lastShakeTime = 0;
+let shakeCooldown = 1200; // ms between shakes
+let shakeThreshold = 18;  // acceleration delta to trigger
 
 // DOM refs
 const ball = document.getElementById('ball');
 const shakeBtn = document.getElementById('shakeBtn');
 const answerEl = document.getElementById('answer');
-const triangle = document.getElementById('triangle');
 const bubblesContainer = document.getElementById('bubbles');
 const shakeCountEl = document.getElementById('shakeCount');
 const historyList = document.getElementById('historyList');
@@ -42,7 +44,7 @@ async function loadFortunes() {
   }
 }
 
-// ----- Audio (Web Audio API) -----
+// ----- Audio -----
 function getAudioCtx() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -162,18 +164,6 @@ function createBubbles() {
   }
 }
 
-// ----- Parallax -----
-function setupParallax() {
-  document.addEventListener('mousemove', (e) => {
-    if (isShaking) return;
-    const cx = window.innerWidth / 2;
-    const cy = window.innerHeight / 2;
-    const dx = (e.clientX - cx) / cx;
-    const dy = (e.clientY - cy) / cy;
-    ball.style.transform = `rotateY(${dx * 6}deg) rotateX(${-dy * 6}deg)`;
-  });
-}
-
 // ----- Toast -----
 let toastTimeout;
 function showToast(msg) {
@@ -201,6 +191,20 @@ function addToHistory(answer) {
   renderHistory();
 }
 
+// ----- Pick answer -----
+const pickAnswer = () => {
+  const r = Math.random();
+  let pool;
+  if (r < 0.4) {
+    pool = fortunes.filter(f => f.type === 'positive');
+  } else if (r < 0.7) {
+    pool = fortunes.filter(f => f.type === 'neutral');
+  } else {
+    pool = fortunes.filter(f => f.type === 'negative');
+  }
+  return pool[Math.floor(Math.random() * pool.length)];
+};
+
 // ----- Core: Shake -----
 async function shake() {
   if (isShaking) return;
@@ -217,19 +221,6 @@ async function shake() {
   const popInterval = setInterval(() => {
     if (Math.random() > 0.5) playBubbleSound();
   }, 150);
-
-  const pickAnswer = () => {
-    const r = Math.random();
-    let pool;
-    if (r < 0.4) {
-      pool = fortunes.filter(f => f.type === 'positive');
-    } else if (r < 0.7) {
-      pool = fortunes.filter(f => f.type === 'neutral');
-    } else {
-      pool = fortunes.filter(f => f.type === 'negative');
-    }
-    return pool[Math.floor(Math.random() * pool.length)];
-  };
 
   const answer = pickAnswer();
 
@@ -261,39 +252,69 @@ async function shake() {
   isShaking = false;
 }
 
-// ----- Device motion -----
+// ----- Shake detection (works on mobile + laptops with accelerometers) -----
 function setupMotion() {
-  if (typeof DeviceMotionEvent !== 'undefined' &&
-      typeof DeviceMotionEvent.requestPermission === 'function') {
-    document.addEventListener('click', () => {
+  // Check if DeviceMotionEvent is available
+  if (typeof DeviceMotionEvent === 'undefined') return;
+
+  // iOS 13+ requires permission request
+  const needsPermission = typeof DeviceMotionEvent.requestPermission === 'function';
+
+  const enableMotion = () => {
+    window.addEventListener('devicemotion', handleMotion);
+  };
+
+  if (needsPermission) {
+    // Show a subtle prompt on first tap (iOS requires user gesture)
+    document.body.addEventListener('click', () => {
       DeviceMotionEvent.requestPermission()
         .then(state => {
-          if (state === 'granted') attachMotionListener();
+          if (state === 'granted') {
+            enableMotion();
+            showToast('Shake your device to reveal fortunes!');
+          }
         })
         .catch(() => {});
     }, { once: true });
-  } else if (window.DeviceMotionEvent) {
-    attachMotionListener();
+  } else {
+    // Android / desktop — just enable directly
+    enableMotion();
   }
 }
 
-function attachMotionListener() {
-  window.addEventListener('devicemotion', (e) => {
-    const acc = e.accelerationIncludingGravity || e.acceleration;
-    if (!acc || acc.x === null) return;
+function handleMotion(e) {
+  const acc = e.accelerationIncludingGravity || e.acceleration;
+  if (!acc || acc.x === null) return;
 
-    const dx = Math.abs(acc.x - lastAccel.x);
-    const dy = Math.abs(acc.y - lastAccel.y);
-    const dz = Math.abs(acc.z - lastAccel.z);
-    const total = dx + dy + dz;
+  const dx = Math.abs((acc.x || 0) - lastAccel.x);
+  const dy = Math.abs((acc.y || 0) - lastAccel.y);
+  const dz = Math.abs((acc.z || 0) - lastAccel.z);
+  const total = dx + dy + dz;
 
-    lastAccel = { x: acc.x || 0, y: acc.y || 0, z: acc.z || 0 };
+  lastAccel = {
+    x: acc.x || 0,
+    y: acc.y || 0,
+    z: acc.z || 0
+  };
 
-    const now = Date.now();
-    if (total > accelShakeThreshold && now - lastShakeTime > 1500) {
-      lastShakeTime = now;
-      shake();
-    }
+  const now = Date.now();
+  if (total > shakeThreshold && now - lastShakeTime > shakeCooldown) {
+    lastShakeTime = now;
+    shake();
+  }
+}
+
+// ----- Parallax (desktop only) -----
+function setupParallax() {
+  if (window.matchMedia('(pointer: coarse)'.matches) return; // skip on touch devices
+
+  document.addEventListener('mousemove', (e) => {
+    if (isShaking) return;
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const dx = (e.clientX - cx) / cx;
+    const dy = (e.clientY - cy) / cy;
+    ball.style.transform = `rotateY(${dx * 5}deg) rotateX(${-dy * 5}deg)`;
   });
 }
 
@@ -308,8 +329,12 @@ ball.addEventListener('click', () => {
   shake();
 });
 
+ball.addEventListener('touchstart', () => {
+  getAudioCtx();
+}, { once: true });
+
 document.addEventListener('keydown', (e) => {
-  if (e.code === 'Space') {
+  if (e.code === 'Space' && !e.repeat) {
     e.preventDefault();
     getAudioCtx();
     shake();

@@ -1,5 +1,5 @@
 /* ============================================================
-   Magic 8 Ball — plain white, split layout, premium typography
+   Magic 8 Ball — responsive, shake-enabled, all devices
    ============================================================ */
 
 :root {
@@ -9,7 +9,6 @@
   --text-light: #888888;
   --gold: #b8943a;
   --gold-light: #d4b45a;
-  --accent: #1a3070;
 }
 
 * {
@@ -21,6 +20,7 @@
 html, body {
   height: 100%;
   overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -32,17 +32,18 @@ body {
 }
 
 /* ============================================================
-   Layout: left ball / right UI
+   Layout
    ============================================================ */
 .layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   align-items: center;
 }
 
-/* ---- Left side ---- */
+/* ---- Left: ball ---- */
 .ball-side {
   display: flex;
   align-items: center;
@@ -52,8 +53,8 @@ body {
 
 .ball-wrapper {
   position: relative;
-  width: min(500px, 50vw);
-  height: min(500px, 50vw);
+  width: min(500px, 48vw);
+  height: min(500px, 48vw);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,30 +62,28 @@ body {
 
 .ball-shadow {
   position: absolute;
-  bottom: -22px;
+  bottom: -18px;
   left: 50%;
   transform: translateX(-50%);
-  width: 60%;
-  height: 30px;
-  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.06) 55%, transparent 75%);
+  width: 58%;
+  height: 28px;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.05) 55%, transparent 75%);
   border-radius: 50%;
-  filter: blur(6px);
+  filter: blur(5px);
   z-index: 0;
 }
 
 .ball {
   position: relative;
-  width: min(420px, 40vw);
-  height: min(420px, 40vw);
+  width: min(420px, 38vw);
+  height: min(420px, 38vw);
   border-radius: 50%;
   cursor: pointer;
   transition: transform 0.12s ease-out;
   z-index: 1;
-  transform-style: preserve-3d;
-  perspective: 800px;
+  touch-action: manipulation;
 }
 
-/* Matte black plastic shell */
 .ball-shell {
   position: absolute;
   inset: 0;
@@ -102,7 +101,6 @@ body {
   overflow: hidden;
 }
 
-/* Glossy highlight */
 .ball-highlight {
   position: absolute;
   top: 10%;
@@ -118,7 +116,6 @@ body {
   pointer-events: none;
 }
 
-/* Specular hotspot */
 .ball-specular {
   position: absolute;
   top: 15%;
@@ -134,7 +131,6 @@ body {
   pointer-events: none;
 }
 
-/* Equator seam */
 .equator-ring {
   position: absolute;
   top: 50%;
@@ -151,7 +147,7 @@ body {
   pointer-events: none;
 }
 
-/* ---- The window ---- */
+/* Window */
 .window {
   position: absolute;
   top: 50%;
@@ -169,7 +165,6 @@ body {
   z-index: 2;
 }
 
-/* Rim */
 .window::before {
   content: '';
   position: absolute;
@@ -218,7 +213,7 @@ body {
   100% { transform: translateY(-70px) scale(1); opacity: 0; }
 }
 
-/* ---- Triangle die ---- */
+/* Triangle */
 .triangle {
   position: absolute;
   top: 50%;
@@ -242,7 +237,7 @@ body {
   clip-path: polygon(50% 5%, 5% 95%, 95% 95%);
 }
 
-/* ---- Answer text — Cormorant Garamond, the premium serif ---- */
+/* Answer text */
 .answer {
   position: absolute;
   top: 50%;
@@ -262,7 +257,7 @@ body {
   opacity: 0;
   transition: opacity 0.6s ease;
   z-index: 2;
-  font-size: clamp(11px, 2.4vw, 19px);
+  font-size: clamp(12px, 2.2vw, 20px);
   word-wrap: break-word;
   overflow-wrap: break-word;
   hyphens: auto;
@@ -274,16 +269,16 @@ body {
 }
 
 .answer[data-length="short"] {
-  font-size: clamp(15px, 3.2vw, 25px);
+  font-size: clamp(16px, 3vw, 28px);
   letter-spacing: 0.05em;
 }
 
 .answer[data-length="medium"] {
-  font-size: clamp(11px, 2.4vw, 19px);
+  font-size: clamp(12px, 2.2vw, 20px);
 }
 
 .answer[data-length="long"] {
-  font-size: clamp(9px, 1.8vw, 15px);
+  font-size: clamp(10px, 1.6vw, 16px);
 }
 
 /* ============================================================
@@ -336,7 +331,7 @@ body {
 
 .title h1 {
   font-family: 'Cormorant Garamond', 'Georgia', serif;
-  font-size: 3.2rem;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
   font-weight: 400;
   letter-spacing: 0.03em;
   color: var(--text-dark);
@@ -355,13 +350,12 @@ body {
 
 .subtitle {
   color: var(--text-mid);
-  font-size: 1rem;
-  margin-top: 0.6rem;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  margin-top: 0.5rem;
   font-style: italic;
   font-weight: 300;
 }
 
-/* Controls */
 .controls {
   display: flex;
   flex-direction: column;
@@ -406,6 +400,7 @@ body {
   font-family: 'Outfit', sans-serif;
   font-size: 0.8rem;
   font-weight: 400;
+  flex-wrap: wrap;
 }
 
 .counter strong {
@@ -421,7 +416,6 @@ body {
   opacity: 0.7;
 }
 
-/* History */
 .history {
   width: 100%;
   max-width: 320px;
@@ -525,34 +519,59 @@ body {
 }
 
 /* ============================================================
-   Responsive
+   Responsive — Tablet
+   ============================================================ */
+@media (max-width: 1024px) {
+  .ball {
+    width: min(340px, 40vw);
+    height: min(340px, 40vw);
+  }
+
+  .ball-wrapper {
+    width: min(380px, 44vw);
+    height: min(380px, 44vw);
+  }
+
+  .ui-side {
+    padding: 2rem;
+    gap: 2rem;
+  }
+}
+
+/* ============================================================
+   Responsive — Mobile
    ============================================================ */
 @media (max-width: 768px) {
   .layout {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: auto 1fr;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   .ball-side {
-    height: 50vh;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    height: auto;
   }
 
   .ball {
-    width: min(280px, 55vw);
-    height: min(280px, 55vw);
+    width: min(280px, 65vw);
+    height: min(280px, 65vw);
   }
 
   .ball-wrapper {
-    width: min(320px, 60vw);
-    height: min(320px, 60vw);
+    width: min(320px, 75vw);
+    height: min(320px, 75vw);
   }
 
   .answer {
-    font-size: clamp(10px, 3.5vw, 14px);
+    font-size: clamp(11px, 3.8vw, 16px);
   }
-  .answer[data-length="short"] { font-size: clamp(13px, 4.5vw, 18px); }
-  .answer[data-length="medium"] { font-size: clamp(10px, 3.5vw, 14px); }
-  .answer[data-length="long"] { font-size: clamp(8px, 2.6vw, 11px); }
+  .answer[data-length="short"] { font-size: clamp(14px, 5vw, 22px); }
+  .answer[data-length="medium"] { font-size: clamp(11px, 3.8vw, 16px); }
+  .answer[data-length="long"] { font-size: clamp(9px, 3vw, 13px); }
 
   .ui-side {
     padding: 1.5rem;
@@ -560,6 +579,7 @@ body {
     align-items: center;
     text-align: center;
     height: auto;
+    padding-bottom: 3rem;
   }
 
   .title { text-align: center; }
@@ -567,6 +587,24 @@ body {
   .controls { align-items: center; }
   .meta { flex-wrap: wrap; justify-content: center; }
   .history { display: none; }
+}
+
+/* ============================================================
+   Small phones
+   ============================================================ */
+@media (max-width: 400px) {
+  .ball {
+    width: min(220px, 70vw);
+    height: min(220px, 70vw);
+  }
+
+  .ball-wrapper {
+    width: min(250px, 80vw);
+    height: min(250px, 80vw);
+  }
+
+  .title h1 { font-size: 1.8rem; }
+  .subtitle { font-size: 0.85rem; }
 }
 
 /* Reduced motion */
