@@ -13,7 +13,7 @@
 <body>
 
   <main class="layout">
-    <!-- Left: the ball -->
+    <!-- Ball side -->
     <section class="ball-side">
       <div class="ball-wrapper">
         <div class="ball-shadow"></div>
@@ -34,7 +34,7 @@
       </div>
     </section>
 
-    <!-- Right: controls -->
+    <!-- UI side — desktop only -->
     <section class="ui-side">
       <header class="title">
         <h1>Magic <span class="eight">8</span> Ball</h1>
@@ -58,6 +58,12 @@
       </div>
     </section>
   </main>
+
+  <!-- Mobile footer — instructions + credits -->
+  <footer class="mobile-footer">
+    <p class="instruction">Tap the ball or shake your device to reveal your fortune</p>
+    <p class="credit">Crafted by <a href="https://shr-dev.lovable.app" target="_blank" rel="noopener">SHR</a></p>
+  </footer>
 
   <div class="toast" id="toast"></div>
 

@@ -1,5 +1,5 @@
 /* ============================================================
-   Magic 8 Ball — responsive, shake-enabled, all devices
+   Magic 8 Ball — responsive, all devices
    ============================================================ */
 
 :root {
@@ -32,7 +32,7 @@ body {
 }
 
 /* ============================================================
-   Layout
+   Layout — desktop: split, mobile: ball only
    ============================================================ */
 .layout {
   display: grid;
@@ -313,7 +313,7 @@ body {
 }
 
 /* ============================================================
-   Right side — UI
+   Right side — desktop UI
    ============================================================ */
 .ui-side {
   display: flex;
@@ -506,6 +506,13 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
+/* ============================================================
+   Mobile footer — hidden on desktop
+   ============================================================ */
+.mobile-footer {
+  display: none;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -539,72 +546,104 @@ body {
 }
 
 /* ============================================================
-   Responsive — Mobile
+   Responsive — Mobile: ball only + footer
    ============================================================ */
 @media (max-width: 768px) {
   .layout {
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: 1fr auto;
     height: auto;
     min-height: 100vh;
     min-height: 100dvh;
   }
 
   .ball-side {
-    padding-top: 2rem;
-    padding-bottom: 1rem;
+    padding-top: 12vh;
+    padding-bottom: 0;
     height: auto;
+    align-items: flex-start;
   }
 
   .ball {
-    width: min(280px, 65vw);
-    height: min(280px, 65vw);
+    width: min(300px, 72vw);
+    height: min(300px, 72vw);
   }
 
   .ball-wrapper {
-    width: min(320px, 75vw);
-    height: min(320px, 75vw);
+    width: min(340px, 80vw);
+    height: min(340px, 80vw);
   }
 
   .answer {
-    font-size: clamp(11px, 3.8vw, 16px);
+    font-size: clamp(12px, 4.2vw, 18px);
   }
-  .answer[data-length="short"] { font-size: clamp(14px, 5vw, 22px); }
-  .answer[data-length="medium"] { font-size: clamp(11px, 3.8vw, 16px); }
-  .answer[data-length="long"] { font-size: clamp(9px, 3vw, 13px); }
+  .answer[data-length="short"] { font-size: clamp(16px, 5.5vw, 24px); }
+  .answer[data-length="medium"] { font-size: clamp(12px, 4.2vw, 18px); }
+  .answer[data-length="long"] { font-size: clamp(10px, 3.4vw, 14px); }
 
+  /* Hide desktop UI */
   .ui-side {
-    padding: 1.5rem;
-    gap: 1.25rem;
-    align-items: center;
-    text-align: center;
-    height: auto;
-    padding-bottom: 3rem;
+    display: none;
   }
 
-  .title { text-align: center; }
-  .title h1 { font-size: 2.2rem; }
-  .controls { align-items: center; }
-  .meta { flex-wrap: wrap; justify-content: center; }
-  .history { display: none; }
+  /* Show mobile footer */
+  .mobile-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 1.5rem 1.5rem 2rem;
+    text-align: center;
+  }
+
+  .instruction {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.82rem;
+    color: var(--text-mid);
+    line-height: 1.4;
+    max-width: 280px;
+  }
+
+  .credit {
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-size: 0.78rem;
+    color: var(--text-light);
+    font-style: italic;
+    letter-spacing: 0.02em;
+  }
+
+  .credit a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 600;
+    font-style: normal;
+    transition: color 0.15s ease;
+  }
+
+  .credit a:hover {
+    color: var(--gold-light);
+  }
+
+  .toast {
+    bottom: 5rem;
+  }
 }
 
-/* ============================================================
-   Small phones
-   ============================================================ */
+/* Small phones */
 @media (max-width: 400px) {
+  .ball-side {
+    padding-top: 8vh;
+  }
+
   .ball {
-    width: min(220px, 70vw);
-    height: min(220px, 70vw);
+    width: min(240px, 75vw);
+    height: min(240px, 75vw);
   }
 
   .ball-wrapper {
-    width: min(250px, 80vw);
-    height: min(250px, 80vw);
+    width: min(270px, 85vw);
+    height: min(270px, 85vw);
   }
-
-  .title h1 { font-size: 1.8rem; }
-  .subtitle { font-size: 0.85rem; }
 }
 
 /* Reduced motion */
