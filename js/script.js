@@ -183,6 +183,7 @@ let history = JSON.parse(localStorage.getItem('magic8ball_history') || '[]');
 
 let lastAccel = { x: 0, y: 0, z: 0 };
 let lastShakeTime = 0;
+let currentType = '';
 
 const ball = document.getElementById('ball');
 const shakeBtn = document.getElementById('shakeBtn');
@@ -381,6 +382,12 @@ function shake() {
     shakeCountEl.textContent = shakeCount;
 
     addToHistory(answer);
+
+    // Update response badge
+    currentType = answer.type;
+    const badge = document.getElementById('responseBadge');
+    badge.textContent = answer.type;
+    badge.className = 'response-badge ' + answer.type;
 
     ball.style.transform = '';
     isShaking = false;

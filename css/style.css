@@ -518,6 +518,11 @@ body {
   border: 0;
 }
 
+/* Response badge — mobile only */
+.response-badge {
+  display: none;
+}
+
 /* ============================================================
    Responsive — Tablet
    ============================================================ */
@@ -587,6 +592,42 @@ body {
   .controls { align-items: center; }
   .meta { flex-wrap: wrap; justify-content: center; }
   .history { display: none; }
+
+  /* Show response badge below ball on mobile */
+  .response-badge {
+    display: block;
+    text-align: center;
+    margin-top: 1.2rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.35rem 1rem;
+    border-radius: 20px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    transition: all 0.3s ease;
+  }
+
+  .response-badge.positive {
+    background: rgba(70, 160, 90, 0.12);
+    color: #3a8a50;
+    border: 1px solid rgba(70, 160, 90, 0.25);
+  }
+
+  .response-badge.neutral {
+    background: rgba(180, 150, 50, 0.12);
+    color: #8a7020;
+    border: 1px solid rgba(180, 150, 50, 0.25);
+  }
+
+  .response-badge.negative {
+    background: rgba(190, 70, 70, 0.12);
+    color: #9a3030;
+    border: 1px solid rgba(190, 70, 70, 0.25);
+  }
 }
 
 /* Small phones */
