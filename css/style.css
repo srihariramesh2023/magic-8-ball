@@ -32,7 +32,7 @@ body {
 }
 
 /* ============================================================
-   Layout — desktop: split, mobile: ball only
+   Layout — desktop: split, mobile: stacked
    ============================================================ */
 .layout {
   display: grid;
@@ -147,7 +147,7 @@ body {
   pointer-events: none;
 }
 
-/* Window — container for answer text sizing */
+/* Window */
 .window {
   position: absolute;
   top: 50%;
@@ -237,7 +237,7 @@ body {
   clip-path: polygon(50% 5%, 5% 95%, 95% 95%);
 }
 
-/* Answer text — Cormorant Garamond with clamp sizing */
+/* Answer text */
 .answer {
   position: absolute;
   top: 50%;
@@ -506,13 +506,6 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* ============================================================
-   Mobile footer — hidden on desktop
-   ============================================================ */
-.mobile-footer {
-  display: none;
-}
-
 .sr-only {
   position: absolute;
   width: 1px;
@@ -546,104 +539,70 @@ body {
 }
 
 /* ============================================================
-   Responsive — Mobile: ball only + footer
+   Responsive — Mobile
    ============================================================ */
 @media (max-width: 768px) {
   .layout {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: auto 1fr;
     height: auto;
     min-height: 100vh;
     min-height: 100dvh;
   }
 
   .ball-side {
-    padding-top: 12vh;
-    padding-bottom: 0;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
     height: auto;
-    align-items: flex-start;
   }
 
   .ball {
-    width: min(300px, 72vw);
-    height: min(300px, 72vw);
+    width: min(280px, 65vw);
+    height: min(280px, 65vw);
   }
 
   .ball-wrapper {
-    width: min(340px, 80vw);
-    height: min(340px, 80vw);
+    width: min(320px, 75vw);
+    height: min(320px, 75vw);
   }
 
   .answer {
-    font-size: 3.2cqw;
+    font-size: clamp(11px, 3.8vw, 16px);
   }
-  .answer[data-length="short"] { font-size: 4cqw; }
-  .answer[data-length="medium"] { font-size: 3.2cqw; }
-  .answer[data-length="long"] { font-size: 2.6cqw; }
+  .answer[data-length="short"] { font-size: clamp(14px, 5vw, 22px); }
+  .answer[data-length="medium"] { font-size: clamp(11px, 3.8vw, 16px); }
+  .answer[data-length="long"] { font-size: clamp(9px, 3vw, 13px); }
 
-  /* Hide desktop UI */
   .ui-side {
-    display: none;
-  }
-
-  /* Show mobile footer */
-  .mobile-footer {
-    display: flex;
-    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1.25rem;
     align-items: center;
-    gap: 0.4rem;
-    padding: 1.5rem 1.5rem 2rem;
     text-align: center;
+    height: auto;
+    padding-bottom: 3rem;
   }
 
-  .instruction {
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.82rem;
-    color: var(--text-mid);
-    line-height: 1.4;
-    max-width: 280px;
-  }
-
-  .credit {
-    font-family: 'Cormorant Garamond', 'Georgia', serif;
-    font-size: 0.78rem;
-    color: var(--text-light);
-    font-style: italic;
-    letter-spacing: 0.02em;
-  }
-
-  .credit a {
-    color: var(--gold);
-    text-decoration: none;
-    font-weight: 600;
-    font-style: normal;
-    transition: color 0.15s ease;
-  }
-
-  .credit a:hover {
-    color: var(--gold-light);
-  }
-
-  .toast {
-    bottom: 5rem;
-  }
+  .title { text-align: center; }
+  .title h1 { font-size: 2.2rem; }
+  .controls { align-items: center; }
+  .meta { flex-wrap: wrap; justify-content: center; }
+  .history { display: none; }
 }
 
 /* Small phones */
 @media (max-width: 400px) {
-  .ball-side {
-    padding-top: 8vh;
-  }
-
   .ball {
-    width: min(240px, 75vw);
-    height: min(240px, 75vw);
+    width: min(220px, 70vw);
+    height: min(220px, 70vw);
   }
 
   .ball-wrapper {
-    width: min(270px, 85vw);
-    height: min(270px, 85vw);
+    width: min(250px, 80vw);
+    height: min(250px, 80vw);
   }
+
+  .title h1 { font-size: 1.8rem; }
+  .subtitle { font-size: 0.85rem; }
 }
 
 /* Reduced motion */
