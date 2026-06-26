@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Magic 8 Ball</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <main class="layout">
+    <!-- Left: the ball -->
+    <section class="ball-side">
+      <div class="ball-wrapper">
+        <div class="ball-shadow"></div>
+        <div class="ball" id="ball" role="button" tabindex="0" aria-label="Shake the Magic 8 Ball">
+          <div class="ball-shell">
+            <div class="ball-highlight"></div>
+            <div class="ball-specular"></div>
+            <div class="equator-ring"></div>
+            <div class="window">
+              <div class="liquid">
+                <div class="bubbles" id="bubbles"></div>
+                <div class="triangle" id="triangle"></div>
+                <span class="answer" id="answer">8</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: controls -->
+    <section class="ui-side">
+      <header class="title">
+        <h1>Magic <span class="eight">8</span> Ball</h1>
+        <p class="subtitle">Ask a yes-or-no question, then shake</p>
+      </header>
+
+      <div class="controls">
+        <button class="shake-btn" id="shakeBtn" type="button">
+          <span class="btn-text">Shake</span>
+        </button>
+        <div class="meta">
+          <span class="counter">Shakes: <strong id="shakeCount">0</strong></span>
+          <span class="dot">·</span>
+          <span class="hint">Spacebar · Click the ball</span>
+        </div>
+      </div>
+
+      <div class="history">
+        <h3>Recent Fortunes</h3>
+        <ul id="historyList"></ul>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/fortunes.json" defer></script>
+  <script src="js/script.js" defer></script>
+</body>
+</html>
