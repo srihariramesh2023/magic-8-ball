@@ -147,7 +147,7 @@ body {
   pointer-events: none;
 }
 
-/* Window */
+/* Window — container for answer text sizing */
 .window {
   position: absolute;
   top: 50%;
@@ -163,6 +163,8 @@ body {
     0 1px 3px rgba(0, 0, 0, 0.12);
   overflow: hidden;
   z-index: 2;
+  container-type: size;
+  container-name: window;
 }
 
 .window::before {
@@ -237,31 +239,33 @@ body {
   clip-path: polygon(50% 5%, 5% 95%, 95% 95%);
 }
 
-/* Answer text */
+/* Answer text — Playfair Display via container query sizing */
 .answer {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: #eef0fa;
-  font-family: 'Cormorant Garamond', 'Georgia', serif;
-  font-weight: 600;
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-weight: 500;
   text-align: center;
-  width: 62%;
-  max-width: 62%;
+  width: 64%;
+  max-width: 64%;
   line-height: 1.15;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   text-shadow:
     0 1px 3px rgba(0, 0, 0, 0.55),
     0 0 8px rgba(100, 150, 255, 0.15);
   opacity: 0;
   transition: opacity 0.6s ease;
   z-index: 2;
-  font-size: clamp(12px, 2.2vw, 20px);
+  /* Size relative to the window (40% of ball) using cqw */
+  font-size: 3.2cqw;
   word-wrap: break-word;
   overflow-wrap: break-word;
   hyphens: auto;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 .answer.visible {
@@ -269,16 +273,17 @@ body {
 }
 
 .answer[data-length="short"] {
-  font-size: clamp(16px, 3vw, 28px);
-  letter-spacing: 0.05em;
+  font-size: 4cqw;
+  letter-spacing: 0.04em;
+  font-weight: 600;
 }
 
 .answer[data-length="medium"] {
-  font-size: clamp(12px, 2.2vw, 20px);
+  font-size: 3.2cqw;
 }
 
 .answer[data-length="long"] {
-  font-size: clamp(10px, 1.6vw, 16px);
+  font-size: 2.6cqw;
 }
 
 /* ============================================================
@@ -330,7 +335,7 @@ body {
 }
 
 .title h1 {
-  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-family: 'Playfair Display', 'Georgia', serif;
   font-size: clamp(2.2rem, 4vw, 3.2rem);
   font-weight: 400;
   letter-spacing: 0.03em;
@@ -372,7 +377,7 @@ body {
   border: none;
   border-radius: 8px;
   color: #fff;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.9rem;
   font-weight: 500;
   letter-spacing: 0.03em;
@@ -397,7 +402,7 @@ body {
   align-items: center;
   gap: 0.65rem;
   color: var(--text-light);
-  font-family: 'Outfit', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.8rem;
   font-weight: 400;
   flex-wrap: wrap;
@@ -422,7 +427,7 @@ body {
 }
 
 .history h3 {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -439,7 +444,7 @@ body {
 }
 
 .history li {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.85rem;
   padding: 0.4rem 0.65rem;
   background: #f8f8f8;
@@ -451,7 +456,7 @@ body {
 
 .history li .type-badge {
   display: inline-block;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.58rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -491,7 +496,7 @@ body {
   color: #fff;
   padding: 0.65rem 1.3rem;
   border-radius: 8px;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 0.8rem;
   font-weight: 400;
   opacity: 0;
@@ -575,11 +580,11 @@ body {
   }
 
   .answer {
-    font-size: clamp(12px, 4.2vw, 18px);
+    font-size: 3.2cqw;
   }
-  .answer[data-length="short"] { font-size: clamp(16px, 5.5vw, 24px); }
-  .answer[data-length="medium"] { font-size: clamp(12px, 4.2vw, 18px); }
-  .answer[data-length="long"] { font-size: clamp(10px, 3.4vw, 14px); }
+  .answer[data-length="short"] { font-size: 4cqw; }
+  .answer[data-length="medium"] { font-size: 3.2cqw; }
+  .answer[data-length="long"] { font-size: 2.6cqw; }
 
   /* Hide desktop UI */
   .ui-side {
@@ -597,7 +602,7 @@ body {
   }
 
   .instruction {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.82rem;
     color: var(--text-mid);
     line-height: 1.4;
@@ -605,7 +610,7 @@ body {
   }
 
   .credit {
-    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-family: 'Playfair Display', 'Georgia', serif;
     font-size: 0.78rem;
     color: var(--text-light);
     font-style: italic;
